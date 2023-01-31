@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.forforever.dao.RoleDao">
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id, role_name, role_code, description, create_time, update_time, is_deleted
+    </sql>
+
+    <!--查询所有-->
+    <select id="findAll" resultType="role">
+        <include refid="columns"></include>
+        from
+        acl_role
+        where
+        is_deleted = 0
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert
+            into acl_role (role_name,role_code,description)
+        values (#{roleName},#{roleCode},#{description})
+    </insert>
+
+    <select id="getById" resultType="role">
+        <include refid="columns"></include>
+        from acl_role where id = #{id}
+    </select>
+
+    <update id="update">
+        update acl_role set
+        <if test="roleName != null and roleName != ''">
+            role_name = #{roleName},
+        </if>
+        <if test="roleCode != null and roleCode != ''">
+            role_code = #{roleCode},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+        update_time = now()
+        where
+            id = #{id}
+    </update>
+
+    <!--delete from acl_role where id = #{id}-->
+    <update id="delete">
+        update
+            acl_role
+        set
+            update_time = now(),
+            is_deleted = 1
+        where
+            id = #{id}
+    </update>
+
+    <select id="findPage" resultType="role">
+        <include refid="columns"></include>
+        from acl_role
+        <where>
+            <if test="roleName != null and roleName != ''">
+                role_name like "%"#{roleName}"%" and
+            </if>
+            is_deleted = 0
+        </where>
+        order by id desc
+    </select>
+
+</mapper>

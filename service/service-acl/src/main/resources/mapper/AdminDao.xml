@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.forforever.dao.AdminDao">
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id, username, password, name, phone , head_url,
+               description, create_time, update_time, is_deleted
+    </sql>
+
+    <!--分页及带条件查询的方法-->
+    <select id="findPage" resultType="admin">
+        <include refid="columns"></include>
+        from acl_admin
+        <where>
+            <if test="username != null and username != ''">
+                username = #{username} and
+            </if>
+            <if test="name != null and name != ''">
+                name like "%"#{name}"%" and
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone} and
+            </if>
+            <if test="createTimeBegin != null and createTimeBegin != ''">
+                create_time >= #{createTimeBegin} and
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                create_time &lt;= #{createTimeEnd} and
+            </if>
+            is_deleted = 0
+        </where>
+        order by id desc
+    </select>
+
+    <!--新增用户-->
+    <insert id="insert">
+        insert into acl_admin(username, password, name, phone)
+        values (#{username},#{password},#{name},#{phone})
+    </insert>
+
+    <!--根据id查询用户信息-->
+    <select id="getById" resultType="admin">
+        <include refid="columns"></include>
+        from acl_admin
+        where id = #{id}
+    </select>
+
+    <update id="update">
+        update acl_admin
+            <set>
+                <if test="name != null and name != ''">
+                    name = #{name},
+                </if>
+                <if test="phone != null and phone != ''">
+                    phone = #{phone},
+                </if>
+                <if test="headUrl != null and headUrl != ''">
+                    head_url = #{headUrl},
+                </if>
+                update_time = now()
+            </set>
+            where
+                id = #{id}
+    </update>
+
+    <update id="delete">
+        update acl_admin set
+        update_time = now(),
+        is_deleted = 1
+        where  id = #{id}
+    </update>
+
+    <select id="findAll" resultType="Admin">
+        <include refid="columns"></include>
+        from acl_admin where is_deleted = 0
+    </select>
+    
+    <!--根据用户名查询用户信息-->
+    <select id="getAdminByUserName" resultType="admin">
+        <include refid="columns"></include>
+        from acl_admin where username = #{username} and is_deleted = 0
+    </select>
+
+</mapper>

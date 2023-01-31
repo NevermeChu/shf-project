@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.forforever.dao.DictDao">
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id, name, parent_id, dict_code,
+               create_time,update_time, is_deleted
+    </sql>
+
+    <!--根据父di获取该节点下所有的子节点-->
+    <select id="findListByParentId" resultType="dict">
+        <include refid="columns"></include>
+        from hse_dict
+        where parent_id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="isParentNode" resultType="integer">
+        select count(id)
+        from hse_dict
+        where parent_id = #{id} and is_deleted = 0
+    </select>
+
+    <!--根据编码获取dict对象-->
+    <select id="findDictByDictCode" resultType="dict">
+        <include refid="columns"></include>
+        from hse_dict
+        where dict_code = #{dictCode} and is_deleted = 0
+    </select>
+
+    <select id="getNameById" resultType="string">
+        select name from hse_dict where id = #{id}
+    </select>
+
+
+</mapper>

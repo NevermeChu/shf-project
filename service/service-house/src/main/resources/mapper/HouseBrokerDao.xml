@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.forforever.dao.HouseBrokerDao">
+
+    <sql id="columns">
+        select id, house_id, broker_id, broker_name,
+               broker_head_url, create_time, update_time, is_deleted
+        from hse_house_broker
+    </sql>
+
+    <!--根据房源id查询经纪人信息-->
+    <select id="getHouseBrokersByHouseId" resultType="houseBroker">
+        <include refid="columns"></include>
+        where house_id = #{houseId} and is_deleted = 0
+    </select>
+
+    <!--根据经纪人id查询该房源经纪人信息-->
+    <select id="getById" resultType="houseBroker">
+        <include refid="columns"></include>
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <!--新增-->
+    <insert id="insert">
+        insert into hse_house_broker
+            (house_id, broker_id, broker_name,broker_head_url)
+        values
+            (#{houseId},#{brokerId},#{brokerName},#{brokerHeadUrl})
+    </insert>
+
+    <!--更新-->
+    <update id="update">
+        update hse_house_broker
+        <set>
+            <if test="brokerId != null and brokerId != ''">
+                broker_Id = #{brokerId},
+            </if>
+            <if test="brokerName != null and brokerName != ''">
+                broker_Name = #{brokerName},
+            </if>
+            <if test="brokerHeadUrl != null and brokerHeadUrl != ''">
+                broker_head_url = #{brokerHeadUrl}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--删除-->
+    <update id="delete">
+        update hse_house_broker
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+
+
+</mapper>

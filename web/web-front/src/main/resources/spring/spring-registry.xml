@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--配置dubbo应用程序名称-->
+    <dubbo:application name="web-front"/>
+    <!--注册配置中心-->
+    <dubbo:registry address="zookeeper://localhost:2181"/>
+    <!--dubbo扫描-->
+    <dubbo:annotation package="top.forforever"/>
+    <!--启动时候不检查 设置连接超时时间-->
+    <dubbo:consumer check="false" timeout="600000"/>
+</beans>
