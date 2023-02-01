@@ -6,10 +6,9 @@
 
 #### 后端：
 
-**spring+springMVC+mybatis+maven+SpringSecurity**
-
-**dubbo+zookeeper【微服务】**
-**mysql+redis**
+**spring+springMVC+mybatis+maven+SpringSecurity**+
+**dubbo+zookeeper【微服务】**+
+**mysql+redis**+
 **七牛云**
 
 #### 前端：
